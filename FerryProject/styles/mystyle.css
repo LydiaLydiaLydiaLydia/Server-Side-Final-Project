@@ -1,0 +1,64 @@
+/*
+green #3c6036
+red #a6233b
+yellow #f1b02b
+dark blue #1b2337
+beige #ebe3cf
+ */
+*{
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #1b2337;
+    font-family: "Baskerville Old Face", "serif";
+}
+ul{
+    width:  100%;
+    display: flex;
+}
+nav>ul>li>a{
+    color: #ebe3cf;
+    font-size: 2.5rem;
+    text-decoration: none;
+}
+nav, nav>ul{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none;
+    background-color: #1b2337;
+}
+nav> li{
+    list-style-type: none;
+    display: inline;
+    text-align: center;
+}
+
+p, form, table, td, tr{
+    background-color: #ebe3cf;
+    font-size: 1.4rem;
+    padding: .75rem;
+    border-radius: 12px;
+    margin-left: auto;
+    margin-right: auto;   
+}
+td, tr{
+    text-align: center;
+}
+button, #button{
+    padding-TOP: .5rem;
+    padding-BOTTOM: .5rem;
+    margin-left: 33%;
+    margin-right: 33%;
+    margin-top: 1REM;
+    margin-bottom: 1rem;
+    width: 30%;
+    font-family: "Baskerville Old Face", "serif";
+}
+table, form, p{
+    width: 95%;
+}
+
+
+
