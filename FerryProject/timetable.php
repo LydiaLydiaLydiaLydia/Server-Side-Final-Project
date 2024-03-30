@@ -1,0 +1,1 @@
+<p>The date you have selected to travel is <?php echo $_POST["usrDate"]; ?> </p>
