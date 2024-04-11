@@ -16,6 +16,8 @@ $allVs = ferrySelect('vehicletypes');
 $allPts = ferrySelect('Ports');
 $pName;
 $pCode;
+$arrPort;
+$ports = array();
 ?>
 
 <form action = "Ticket.php" method = "post">
@@ -41,11 +43,13 @@ $pCode;
     </select>
     <br>
     <label>Where will you be travelling from?</label>
-    <select name = "depPort">
+    <select name = "depPort" id = "depPort">
     <?php
         while($row=$allPts->fetch()){
+            
             $pCode = $row['PCode'];
             $pName = $row['PName'];
+            $ports[$pCode] = $pName;
     ?>
 
     <option value = "<?php echo $pCode; ?>">
@@ -59,14 +63,16 @@ $pCode;
 </form>
 <?php
 if(isset($_POST["usrDate"])){
-    //echo "childe";
     $depDate = $_POST["usrDate"];
+    $pCode = $_POST["depPort"];
     $availTimes = selectDepartures($depDate, $pCode);
-    while($row = $availTimes->fetch()){
-        echo "<p>egg</p>";
+    foreach($ports as $key => $value){
+        if($key != $pCode){
+            $arrPort = $value;
+        }
     }
     include "timetable.php";
-    
 }
+
 include "inc/footer.inc.php";
 ?>

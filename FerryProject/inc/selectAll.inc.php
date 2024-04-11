@@ -21,16 +21,18 @@
     function selectDepartures($depDate, $depPort){
         try{
             $pdo = new PDO('mysql:host=localhost;dbname=ferrysys; charset=utf8','root','');
-    
+            
             //making sure an exception is thrown with each error
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-            $sql = "SELECT * FROM departures WHERE date = $depDate";
+            
+            $sql = "SELECT * FROM departures WHERE Date = :depdate AND DepPort = :depport";
+            
             $result = $pdo->prepare($sql);
+            $result->bindValue(':depdate', $depDate);
+            $result->bindValue(':depport', $depPort);
             $result->execute(); 
-            while($row = $result->fetch()){
-                echo "<p>egg</p>";
-            }
+            
+            
             return $result; 
         }
         catch(PDOException $e){

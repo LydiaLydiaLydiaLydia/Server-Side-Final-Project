@@ -1,33 +1,28 @@
 <table>
     <tr>
-        <th>Port</th>
-        <th>Departs</th>
-        <th>Arrives</th>
+        <th>Departs from <?php echo $ports[$pCode]; ?></th>
+        <th>Arrives at <?php echo $arrPort; ?></th>
         <th>Available</th>
     </tr>
 <?php
+    $counter = 0;
     while($row = $availTimes->fetch()){
 ?>
     <tr>
         <td>
 <?php
-    echo $pName;
-?>
-        </td>
-        <td>
-<?php
-    echo $row['DepTime'];
+    echo substr($row['DepTime'], 0, 5);
 ?> 
         </td>
         <td>
 <?php
-    echo $row['ArrTime'];
+    echo substr($row['ArrTime'], 0, 5);
 ?> 
         </td>
 <?php
         if($row['Capacity'] >= $vUnit){
 ?>
-        <td>Tickets Available</td>
+        <td><button id = "<?php echo 'dep'.$counter; ?>">Book Ticket</button></td>
 <?php
         }
         else{
@@ -38,6 +33,7 @@
 ?>
     </tr>
 <?php
+    $counter++;
     }
 ?>
 </table>
