@@ -46,6 +46,40 @@ div{
     font-size: 1.25rem;
     padding-left: 2%;
     padding-right: 2%;
+    justify-content: space-around;
+}
+
+/*form and labels*/
+label{
+    padding: 1rem;
+    line-height: 2rem;
+}
+form{
+    margin: 1.5rem;
+}
+/*Table style*/
+table, tbody{
+    width: 100%;
+}
+td, tr{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    text-align: center;
+}
+td:nth-child(3){
+    padding:0rem;
+}
+#oddTr{
+    background-color: blanchedalmond;
+}
+
+/*Button*/
+button{
+    padding: 1rem;
+    margin: 0%;
+}
+button:hover{
+    cursor: pointer;
 }
 
 /*Foot Style*/

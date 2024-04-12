@@ -8,7 +8,7 @@
     $counter = 0;
     while($row = $availTimes->fetch()){
 ?>
-    <tr>
+    <tr <?php if(($counter % 2) == 0){ echo 'id = "oddTr"'; }?>>
         <td>
 <?php
     echo substr($row['DepTime'], 0, 5);
