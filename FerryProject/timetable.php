@@ -7,9 +7,10 @@
 <?php
     $counter = 0;
     while($row = $availTimes->fetch()){
+        $departures[$counter] = $row['DepTime'];
 ?>
     <tr <?php if(($counter % 2) == 0){ echo 'id = "oddTr"'; }?>>
-        <td>
+        <td class = "depTime">
 <?php
     echo substr($row['DepTime'], 0, 5);
 ?> 
@@ -22,7 +23,7 @@
 <?php
         if($row['Capacity'] >= $vUnit){
 ?>
-        <td><button id = "<?php echo 'dep'.$counter; ?>">Book Ticket</button></td>
+        <td><button class = "chooseTick" id = "<?php echo $counter; ?>">Book Ticket</button></td>
 <?php
         }
         else{

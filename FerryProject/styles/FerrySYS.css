@@ -92,3 +92,8 @@ footer{
 footer>*{
     padding: .5rem;
 }
+
+/*the ticketDetails div*/
+#ticketDetails{
+    display: none;
+}

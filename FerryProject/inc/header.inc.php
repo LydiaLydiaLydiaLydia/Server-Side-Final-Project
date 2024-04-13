@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel = "stylesheet" href = "styles/FerrySYS.css">
     <title><?php echo $pg_title; ?></title>
+    <script src = "scripts/ticket.js"></script>
 </head>
 <body>
 <nav>
