@@ -71,8 +71,9 @@ $_SESSION['forTicket'] = array(
 if(isset($_POST["usrDate"])){
     $depDate = $_POST["usrDate"];
     $pCode = $_POST["depPort"];
-    $vType = $vehicles[$_POST["vehicleType"]];
+    $vType = $_POST['vehicleType'];
     $vUnit = $vehicles[$vType];
+    
     echo $vType." is the vType and ".$pCode." is the pCode"; 
     $availTimes = selectDepartures($depDate, $pCode);
     foreach($ports as $key => $value){
