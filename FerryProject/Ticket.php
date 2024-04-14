@@ -10,19 +10,44 @@ if(isset($_POST["usrDate"])){
     $dispDate = date("Y-m-d");
 }
 
+$vehicles = array();
+$ports = array();
+$departures = array();
+
 //loading in values for the vehicle type picker
 include 'inc/selectAll.inc.php';
 $allVs = ferrySelect('vehicletypes');
+$i = 0;
+while($row=$allVs->fetch()){
+    //so the arrays should look like 
+    //vehicles[Car[], Coach[]...etc]
+    //Car[]
+    $vehicles[$row['VDescription']] = array();
+    $vehicles[$row['VDescription']]['vCode'] = $row['VCode'];
+    $vehicles[$row['VDescription']]['price'] = $row['Price'];
+    $vehicles[$row['VDescription']]['units'] = $row['Units'];
+    $i++;
+}
+
+//loading in the ports from database into array
 $allPts = ferrySelect('Ports');
+$i = 0;
+while($row=$allPts->fetch()){
+    $ports[$row['PCode']] = $row['PName'];
+}
+
 $pName;
 $pCode;
 $vType;
 $arrPort;
-$ports = array();
-$departures = array();
-$vehicles = array();
+
 $_SESSION['forTicket'] = array(
-    'vType' => ""
+    'tCode' => 0,
+    'tDate' => "",
+    'tTime' => "",
+    'vCode' => "",
+    'salePrice' => 0,
+    'depID' => 0
 );
 ?>
 <form action = "Ticket.php" method = "post">
@@ -32,14 +57,11 @@ $_SESSION['forTicket'] = array(
     <label>How will you be travelling?</label>
     <select id = "vehicleType" name = "vehicleType">
     <?php
-        while($row=$allVs->fetch()){
-            $vType = $row['VDescription'];
-            $vUnit = $row['Units'];
-            $vehicles[$vType] = $vUnit;
+        foreach($vehicles as $key => $value){
     ?>
 
-        <option value = "<?php echo $vType; ?>">
-    <?php echo $vType; ?>
+        <option value = "<?php echo $key; ?>">
+    <?php echo $key; ?>
         </option>
 
     <?php
@@ -51,15 +73,12 @@ $_SESSION['forTicket'] = array(
     <label>Where will you be travelling from?</label>
     <select name = "depPort" id = "depPort">
     <?php
-        while($row=$allPts->fetch()){
-            
-            $pCode = $row['PCode'];
-            $pName = $row['PName'];
-            $ports[$pCode] = $pName;
+        foreach($ports as $key => $value){
+
     ?>
 
-    <option value = "<?php echo $pCode; ?>">
-    <?php echo $pName; ?>
+    <option value = "<?php echo $key; ?>">
+    <?php echo $value; ?>
     </option>
 
     <?php
@@ -72,9 +91,7 @@ if(isset($_POST["usrDate"])){
     $depDate = $_POST["usrDate"];
     $pCode = $_POST["depPort"];
     $vType = $_POST['vehicleType'];
-    $vUnit = $vehicles[$vType];
-    
-    echo $vType." is the vType and ".$pCode." is the pCode"; 
+    $vUnit = $vehicles[$vType]['units'];
     $availTimes = selectDepartures($depDate, $pCode);
     foreach($ports as $key => $value){
         if($key != $pCode){
@@ -82,18 +99,32 @@ if(isset($_POST["usrDate"])){
         }
     }
     include "timetable.php";
+    $_SESSION['forTicket'] = array(
+        'tCode' => 0,
+        'tDate' => $depDate,
+        'tTime' => "",
+        'vCode' => $vehicles[$vType]['vCode'],
+        'salePrice' => $vehicles[$vType]['price'],
+        'depID' => 0
+    );
 ?>
 <script>
     makeButtonsWork();
 </script>
 <div id = "ticketDetails">
-    <p>Date of Departure:</p>
-    <p><?php echo $depDate; ?></p>
-    <br>
-    <p>Time of Departure:</p>
-    <p id = "time"></p> 
-    <p>Vehicle Type:</p>
-    <p id = "vehicle"></p>
+    <form action = 'purchaseTicket.php' method = 'post'>
+        <p>Date of Departure:</p>
+        <p><?php echo $depDate; ?></p>
+        <br>
+        <p>Time of Departure:</p>
+        <p id = "time"></p> 
+        <p>Vehicle Type:</p>
+        <p id = "vehicle"><?php echo $vType; ?></p>
+        <p>Ticket Price:</p>
+        <p><?php echo $vehicles[$vType]['price']; ?></p>
+        <input type = 'text' name = 'departureTime' id = 'departureTime' value = "">
+        <input type = 'submit' value = "Confirm Ticket Details">
+    </form>
 </div>
 <?php
 }

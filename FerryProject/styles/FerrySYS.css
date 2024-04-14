@@ -69,7 +69,7 @@ td, tr{
 td:nth-child(3){
     padding:0rem;
 }
-#oddTr{
+.oddTr{
     background-color: blanchedalmond;
 }
 

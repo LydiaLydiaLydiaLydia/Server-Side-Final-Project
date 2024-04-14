@@ -7,9 +7,9 @@
 <?php
     $counter = 0;
     while($row = $availTimes->fetch()){
-        $departures[$counter] = $row['DepTime'];
+        $departures[$row['DepTime']] = $row['DepID'];
 ?>
-    <tr <?php if(($counter % 2) == 0){ echo 'id = "oddTr"'; }?>>
+    <tr <?php if(($counter % 2) == 0){ echo 'class = "oddTr"'; }?>>
         <td class = "depTime">
 <?php
     echo substr($row['DepTime'], 0, 5);
