@@ -7,7 +7,7 @@
 <?php
     $counter = 0;
     while($row = $availTimes->fetch()){
-        $departures[$row['DepTime']] = $row['DepID'];
+        $departures[substr($row['DepTime'], 0, 5)] = $row['DepID'];
 ?>
     <tr <?php if(($counter % 2) == 0){ echo 'class = "oddTr"'; }?>>
         <td class = "depTime">

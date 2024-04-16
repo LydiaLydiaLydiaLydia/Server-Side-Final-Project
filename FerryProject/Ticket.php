@@ -1,4 +1,5 @@
 <?php
+session_start();
 $pg_title = "Purchase Ticket | FerrySYS";
 include "inc/header.inc.php";
 
@@ -41,10 +42,10 @@ $pCode;
 $vType;
 $arrPort;
 
+
 $_SESSION['forTicket'] = array(
-    'tCode' => 0,
-    'tDate' => "",
-    'tTime' => "",
+    'tDate' => date('Y-m-d'),
+    'tTime' => date('G:i:s'),
     'vCode' => "",
     'salePrice' => 0,
     'depID' => 0
@@ -99,14 +100,8 @@ if(isset($_POST["usrDate"])){
         }
     }
     include "timetable.php";
-    $_SESSION['forTicket'] = array(
-        'tCode' => 0,
-        'tDate' => $depDate,
-        'tTime' => "",
-        'vCode' => $vehicles[$vType]['vCode'],
-        'salePrice' => $vehicles[$vType]['price'],
-        'depID' => 0
-    );
+    $_SESSION['forTicket']['vCode'] = $vehicles[$vType]['vCode'];
+    $_SESSION['forTicket']['salePrice'] = $vehicles[$vType]['price'];
 ?>
 <script>
     makeButtonsWork();
@@ -123,10 +118,12 @@ if(isset($_POST["usrDate"])){
         <p>Ticket Price:</p>
         <p><?php echo $vehicles[$vType]['price']; ?></p>
         <input type = 'text' name = 'departureTime' id = 'departureTime' value = "">
+        <br>
         <input type = 'submit' value = "Confirm Ticket Details">
     </form>
 </div>
 <?php
+$_SESSION['departures'] = $departures;
 }
 include "inc/footer.inc.php";
 ?>

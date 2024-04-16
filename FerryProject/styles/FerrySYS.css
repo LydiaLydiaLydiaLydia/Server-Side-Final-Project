@@ -97,3 +97,7 @@ footer>*{
 #ticketDetails{
     display: none;
 }
+
+#departureTime{
+    display:none;
+}
