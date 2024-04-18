@@ -124,6 +124,7 @@ if(isset($_POST["usrDate"])){
 </div>
 <?php
 $_SESSION['departures'] = $departures;
+$_SESSION['vUnit'] = $vehicles[$vType]['units']; 
 }
 include "inc/footer.inc.php";
 ?>
