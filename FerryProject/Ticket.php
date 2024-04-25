@@ -4,7 +4,7 @@ $pg_title = "Purchase Ticket | FerrySYS";
 include "inc/header.inc.php";
 
 //loading in values for the date picker
-date_default_timezone_set("GMT");
+date_default_timezone_set("Europe/Dublin");
 if(isset($_POST["usrDate"])){
     $dispDate = date("Y-m-d", strtotime($_POST["usrDate"]));
 }else{
@@ -16,8 +16,9 @@ $ports = array();
 $departures = array();
 
 //loading in values for the vehicle type picker
-include 'inc/selectAll.inc.php';
-$allVs = ferrySelect('vehicletypes');
+include 'inc/databaseFuncs.inc.php';
+$pdo = connect();
+$allVs = ferrySelect($pdo, 'vehicletypes');
 $i = 0;
 while($row=$allVs->fetch()){
     //so the arrays should look like 
@@ -31,7 +32,7 @@ while($row=$allVs->fetch()){
 }
 
 //loading in the ports from database into array
-$allPts = ferrySelect('Ports');
+$allPts = ferrySelect($pdo, 'Ports');
 $i = 0;
 while($row=$allPts->fetch()){
     $ports[$row['PCode']] = $row['PName'];
@@ -85,7 +86,10 @@ $_SESSION['forTicket'] = array(
     <?php
         }
     ?>
-    <input type = "submit" value = "Show Available Departures">
+    </select>
+    <br>
+    <br>
+    <input id = 'submit' type = "submit" value = "Show Available Departures">
 </form>
 <?php
 if(isset($_POST["usrDate"])){
@@ -93,7 +97,7 @@ if(isset($_POST["usrDate"])){
     $pCode = $_POST["depPort"];
     $vType = $_POST['vehicleType'];
     $vUnit = $vehicles[$vType]['units'];
-    $availTimes = selectDepartures($depDate, $pCode);
+    $availTimes = selectDepartures($pdo, $depDate, $pCode);
     foreach($ports as $key => $value){
         if($key != $pCode){
             $arrPort = $value;
@@ -110,7 +114,6 @@ if(isset($_POST["usrDate"])){
     <form action = 'purchaseTicket.php' method = 'post'>
         <p>Date of Departure:</p>
         <p><?php echo $depDate; ?></p>
-        <br>
         <p>Time of Departure:</p>
         <p id = "time"></p> 
         <p>Vehicle Type:</p>
@@ -119,7 +122,7 @@ if(isset($_POST["usrDate"])){
         <p><?php echo $vehicles[$vType]['price']; ?></p>
         <input type = 'text' name = 'departureTime' id = 'departureTime' value = "">
         <br>
-        <input type = 'submit' value = "Confirm Ticket Details">
+        <input id = 'submit' type = 'submit' value = "Confirm Ticket Details">
     </form>
 </div>
 <?php

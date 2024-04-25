@@ -1,12 +1,21 @@
 <?php
-    function ferrySelect($tableName){
+    function connect(){
+        try{
+            $pdo = new PDO('mysql:host=localhost;dbname=ferrysys; charset=utf8','root','');
+    
+            //making sure an exception is thrown with each error
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $pdo;
+        }
+        catch(PDOException $e){
+            echo "Sorry, cannot connect to the database at this time<br>";
+            echo  $e->getMessage()." in ".$e->getFile()." on line ".$e->getLine();
+        }
+    }
+
+    function ferrySelect($pdo, $tableName){
         
     try{
-        $pdo = new PDO('mysql:host=localhost;dbname=ferrysys; charset=utf8','root','');
-
-        //making sure an exception is thrown with each error
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         $sql = 'SELECT * FROM '.$tableName;
         $result = $pdo->prepare($sql);
         $result->execute(); 
@@ -18,13 +27,8 @@
     }
     }
 
-    function selectDepartures($depDate, $depPort){
+    function selectDepartures($pdo, $depDate, $depPort){
         try{
-            $pdo = new PDO('mysql:host=localhost;dbname=ferrysys; charset=utf8','root','');
-            
-            //making sure an exception is thrown with each error
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
             $sql = "SELECT * FROM departures WHERE Date = :depdate AND DepPort = :depport";
             
             $result = $pdo->prepare($sql);
@@ -40,13 +44,8 @@
             echo  $e->getMessage()." in ".$e->getFile()." on line ".$e->getLine();
         }
     }
-    function insertTicket($tdate, $ttime, $vcode, $saleprice, $depid, $unitSize){
-        try{
-            $pdo = new PDO('mysql:host=localhost;dbname=ferrysys; charset=utf8','root','');
-            
-            //making sure an exception is thrown with each error
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
+    function insertTicket($pdo, $tdate, $ttime, $vcode, $saleprice, $depid, $unitSize){
+        try{ 
             $sql = "INSERT INTO tickets (TDate, TTime, VCode, SalePrice, DepID) 
                     VALUES (:tdate, :ttime, :vcode, :saleprice, :depid)";
             
@@ -60,8 +59,9 @@
                 $last_id = $pdo->lastInsertId();
             }
 
-            echo $last_id;
-            reduceCapacity($unitSize, $depid);
+            //echo $last_id;
+            reduceCapacity($pdo, $unitSize, $depid);
+            return $last_id;
         }
         catch(PDOException $e){
             echo "Sorry, cannot connect to the database at this time<br>";
@@ -69,13 +69,8 @@
         }
     }
 
-    function reduceCapacity($unitSize, $depid){
-        try{
-            $pdo = new PDO('mysql:host=localhost;dbname=ferrysys; charset=utf8','root','');
-            
-            //making sure an exception is thrown with each error
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
+    function reduceCapacity($pdo, $unitSize, $depid){
+        try{ 
             $sql = "UPDATE departures SET Capacity = (Capacity - :unitsize) WHERE DepID = :depid";
             
             $result = $pdo->prepare($sql);
@@ -89,5 +84,4 @@
         }
     }
 
-    //sfunction getTicketNumber()
 ?>

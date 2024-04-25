@@ -74,9 +74,10 @@ td:nth-child(3){
 }
 
 /*Button*/
-button{
+button, #submit{
     padding: 1rem;
     margin: 0%;
+    border-radius: 10px;
 }
 button:hover{
     cursor: pointer;
@@ -100,4 +101,20 @@ footer>*{
 
 #departureTime{
     display:none;
+}
+div>form{
+    display: block;
+    background-color: blanchedalmond;
+    border-radius: 50px;
+    padding: 4%;
+}
+#adminChoice{
+    display: flex;
+}
+#adminChoice>div{
+    flex-direction: row;
+    background-color: darkgrey;
+    margin: 1%;
+    border-radius: 10px;
+    padding: 3%;
 }

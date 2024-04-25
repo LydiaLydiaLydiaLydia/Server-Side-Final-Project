@@ -12,6 +12,7 @@
     <ul>
         <li><a href = "index.php">Home</a></li>
         <li><a href = "Ticket.php">Order A Ticket</a></li>
+        <li><a href = "AdminDashboard.php">Admin</a></li>
     </ul>
 </nav>
 <div id = "content">
