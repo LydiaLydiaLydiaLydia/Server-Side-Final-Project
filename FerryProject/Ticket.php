@@ -1,6 +1,7 @@
 <?php
 session_start();
 $pg_title = "Purchase Ticket | FerrySYS";
+$pg_script = "scripts/ticket.js";
 include "inc/header.inc.php";
 
 //loading in values for the date picker
@@ -19,7 +20,7 @@ $departures = array();
 include 'inc/databaseFuncs.inc.php';
 $pdo = connect();
 $allVs = ferrySelect($pdo, 'vehicletypes');
-$i = 0;
+//$i = 0;
 while($row=$allVs->fetch()){
     //so the arrays should look like 
     //vehicles[Car[], Coach[]...etc]
@@ -28,12 +29,12 @@ while($row=$allVs->fetch()){
     $vehicles[$row['VDescription']]['vCode'] = $row['VCode'];
     $vehicles[$row['VDescription']]['price'] = $row['Price'];
     $vehicles[$row['VDescription']]['units'] = $row['Units'];
-    $i++;
+    //$i++;
 }
 
 //loading in the ports from database into array
 $allPts = ferrySelect($pdo, 'Ports');
-$i = 0;
+//$i = 0;
 while($row=$allPts->fetch()){
     $ports[$row['PCode']] = $row['PName'];
 }

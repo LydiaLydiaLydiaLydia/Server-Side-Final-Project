@@ -54,6 +54,11 @@ label{
     padding: 1rem;
     line-height: 2rem;
 }
+input{
+    padding: .75rem;
+    margin: 1.5%;
+    margin-left: 7%;
+}
 form{
     margin: 1.5rem;
 }

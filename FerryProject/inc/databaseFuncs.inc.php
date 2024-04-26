@@ -84,4 +84,24 @@
         }
     }
 
+    //returns an array of the vehicle codes
+    function getVehicleCodes($pdo){
+        try{
+            $sql = "SELECT VCode FROM vehicletypes";
+            $VCselect = $pdo->prepare($sql);
+            $VCselect->execute();
+
+            $codes = array();
+
+            while($row=$VCselect->fetch()){
+                array_push($codes, $row['VCode']);
+            }
+            return $codes;
+        }
+        catch(PDOException $e){
+            echo "Sorry, cannot connect to the database at this time<br>";
+            echo  $e->getMessage()." in ".$e->getFile()." on line ".$e->getLine();
+        }
+    }
+
 ?>
