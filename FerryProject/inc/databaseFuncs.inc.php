@@ -36,7 +36,6 @@
             $result->bindValue(':depport', $depPort);
             $result->execute(); 
             
-            
             return $result; 
         }
         catch(PDOException $e){
@@ -59,7 +58,7 @@
                 $last_id = $pdo->lastInsertId();
             }
 
-            //echo $last_id;
+            $result = null;
             reduceCapacity($pdo, $unitSize, $depid);
             return $last_id;
         }
@@ -76,7 +75,8 @@
             $result = $pdo->prepare($sql);
             $result->bindValue(':unitsize', $unitSize);
             $result->bindValue(':depid', $depid);
-            $result->execute();            
+            $result->execute();
+            $result = null;            
         }
         catch(PDOException $e){
             echo "Sorry, cannot connect to the database at this time<br>";
@@ -96,7 +96,28 @@
             while($row=$VCselect->fetch()){
                 array_push($codes, $row['VCode']);
             }
+
+            $VCselect = null;
             return $codes;
+        }
+        catch(PDOException $e){
+            echo "Sorry, cannot connect to the database at this time<br>";
+            echo  $e->getMessage()." in ".$e->getFile()." on line ".$e->getLine();
+        }
+    }
+
+    function insertVehicle($pdo){
+        try{
+            $sql = "INSERT INTO vehicletypes(VDescription, VCode, Price, Units, VStatus) VALUES (:vdescription, :vcode, :price, :units, :vstatus)";
+            $Vinsert = $pdo->prepare($sql);
+            $Vinsert->bindValue(':vdescription', $_SESSION['forVehicle']['vDescription']);
+            $Vinsert->bindValue(':vcode', $_SESSION['forVehicle']['vCode']);
+            $Vinsert->bindValue(':price', $_SESSION['forVehicle']['price']);
+            $Vinsert->bindValue(':units', $_SESSION['forVehicle']['units']);
+            $Vinsert->bindValue(':vstatus', $_SESSION['forVehicle']['vStatus']);
+            $Vinsert->execute(); 
+
+            $Vinsert = null;
         }
         catch(PDOException $e){
             echo "Sorry, cannot connect to the database at this time<br>";
