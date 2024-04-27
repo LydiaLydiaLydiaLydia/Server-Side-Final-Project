@@ -100,7 +100,7 @@ footer>*{
 }
 
 /*the ticketDetails div*/
-#ticketDetails{
+#ticketDetails, #vDetails{
     display: none;
 }
 

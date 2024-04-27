@@ -125,4 +125,46 @@
         }
     }
 
+    function getTicketVCodes($pdo){
+        try{
+            $sql = "SELECT DISTINCT VCode FROM Tickets";
+            $TVSelect = $pdo->prepare($sql);
+            $TVSelect->execute();
+
+            $TVCodes = array();
+
+            while($row = $TVSelect->fetch()){
+                array_push($TVCodes, $row['VCode']);
+            }
+
+            $TVSelect = null;
+            return $TVCodes;
+        }
+        catch(PDOException $e){
+            echo "Sorry, cannot connect to the database at this time<br>";
+            echo  $e->getMessage()." in ".$e->getFile()." on line ".$e->getLine();
+        }
+    }
+
+    function getVehicles($pdo){
+        try{
+            $sql = "SELECT * FROM VehicleTypes WHERE VStatus = 'A'";
+            $allVSelect = $pdo->prepare($sql);
+            $allVSelect->execute();
+            $vehicles = array();
+            while($row=$allVSelect->fetch()){
+                $vehicles[$row['VDescription']] = array();
+                $vehicles[$row['VDescription']]['vCode'] = $row['VCode'];
+                $vehicles[$row['VDescription']]['price'] = $row['Price'];
+                $vehicles[$row['VDescription']]['units'] = $row['Units'];
+            }
+            $allVSelect = null;
+            return $vehicles;
+        }
+        catch(PDOException $e){
+            echo "Sorry, cannot connect to the database at this time<br>";
+            echo  $e->getMessage()." in ".$e->getFile()." on line ".$e->getLine();
+        }
+    }
+
 ?>

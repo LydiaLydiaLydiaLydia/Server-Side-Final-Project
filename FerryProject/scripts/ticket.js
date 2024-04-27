@@ -8,7 +8,7 @@ let makeButtonsWork = function(){
     }
 }
 let chooseTicket = function(e){
-    console.log(this.id);
+    //console.log(this.id);
     document.getElementById("ticketDetails").style.display = "flex";
     document.getElementById("time").innerHTML = depTimes[this.id];
     let depTime = document.getElementById("departureTime");
