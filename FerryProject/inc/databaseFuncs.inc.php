@@ -152,6 +152,8 @@
             $allVSelect = $pdo->prepare($sql);
             $allVSelect->execute();
             $vehicles = array();
+
+            //returns an array of vehicles
             while($row=$allVSelect->fetch()){
                 $vehicles[$row['VDescription']] = array();
                 $vehicles[$row['VDescription']]['vCode'] = $row['VCode'];
@@ -160,6 +162,40 @@
             }
             $allVSelect = null;
             return $vehicles;
+        }
+        catch(PDOException $e){
+            echo "Sorry, cannot connect to the database at this time<br>";
+            echo  $e->getMessage()." in ".$e->getFile()." on line ".$e->getLine();
+        }
+    }
+
+    function updateVehicle($pdo, $vehicle){
+        try{
+            $sql = "UPDATE VehicleTypes SET VDescription = :vdesc, Price = :price, Units = :units, VStatus = :vstatus WHERE VCode = :vcode";
+            $Vupdate = $pdo->prepare($sql);
+            $Vupdate->bindValue(':vdesc', $vehicle['vDescription']);
+            $Vupdate->bindValue(':vcode', $vehicle['vCode']);
+            $Vupdate->bindValue(':price', $vehicle['price']);
+            $Vupdate->bindValue(':units', $vehicle['units']);
+            $Vupdate->bindValue(':vstatus', $vehicle['vStatus']);
+            $Vupdate->execute(); 
+
+            $Vupdate = null;
+        }
+        catch(PDOException $e){
+            echo "Sorry, cannot connect to the database at this time<br>";
+            echo  $e->getMessage()." in ".$e->getFile()." on line ".$e->getLine();
+        }
+    }
+
+    function deleteVehicle($pdo, $vehicle){
+        try{
+            $sql = "DELETE FROM VehicleTypes WHERE VCode = :vcode";
+            $Vdelete = $pdo->prepare($sql);
+            $Vdelete->bindValue(':vcode', $vehicle['vCode']);
+            $Vdelete->execute(); 
+
+            $Vdelete = null;
         }
         catch(PDOException $e){
             echo "Sorry, cannot connect to the database at this time<br>";
