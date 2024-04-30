@@ -29,11 +29,13 @@
 
     function selectDepartures($pdo, $depDate, $depPort){
         try{
-            $sql = "SELECT * FROM departures WHERE Date = :depdate AND DepPort = :depport";
+            $sql = "SELECT * FROM departures WHERE Date = :depdate AND DepPort = :depport AND DepTime > :currtime AND Date >= :currdate";
             
             $result = $pdo->prepare($sql);
             $result->bindValue(':depdate', $depDate);
             $result->bindValue(':depport', $depPort);
+            $result->bindValue(':currtime', date('G:i:s'));
+            $result->bindValue(':currdate', date('Y-m-d'));
             $result->execute(); 
             
             return $result; 

@@ -55,12 +55,9 @@ if(isset($_POST['vdescription'])){
 
         if(insertVehicle($pdo)){
         ?>
-        <script defer>
-            hideForm();
-            disableForm();
-            
-        </script>
+
         <p id = 'alert'>Vehicle has been inserted into the database successfully!</p>
+        <a href = "addVehicle.php">Add Another</a>
         <?php
         }
         $pdo = null;
@@ -79,20 +76,27 @@ else{
 
 <form action = "addVehicle.php" method = "post" id = "form">
     <label>Vehicle Description: </label><br>
-    <input type = "text" name = "vdescription" id = "vdescription" required minlength = "1" maxlength = "25" value = "<?php echo $val_desc; ?>" class = "able">
+    <input type = "text" name = "vdescription" id = "vdescription" required minlength = "1" maxlength = "25" value = "<?php echo $val_desc; ?>">
     <br><br>
     <label>2 Character Identifying Code: (e.g., CR, VN)</label><br>
-    <input type = "text" name = "vcode" id = "vcode" minlength = "2" maxlength = "2" pattern = "[a-zA-Z]{2}" required value = "<?php echo $val_code; ?>" class = "able">
+    <input type = "text" name = "vcode" id = "vcode" minlength = "2" maxlength = "2" pattern = "[a-zA-Z]{2}" required value = "<?php echo $val_code; ?>" >
     <br><br>
     <label>Price: </label><br>
-    <input type = "text" name = "price" id = "price" pattern = "\d+\.?\d*" maxlength = "5" required value = "<?php echo $val_pric; ?>" class = "able">
+    <input type = "text" name = "price" id = "price" pattern = "\d+\.?\d*" maxlength = "5" required value = "<?php echo $val_pric; ?>" >
     <br><br>
     <label>Unit Size: (where one unit is the size of a standard carpark space)</label><br>
-    <input type = "number" name = "units" id = "units" max = "3"   value = "<?php echo $val_unit; ?>" required class = "able">
+    <input type = "number" name = "units" id = "units" max = "3"   value = "<?php echo $val_unit; ?>" required>
     <br><br><br>
-    <input type = "submit" value = "Add" id = "submit" class = "able">
+    <input type = "submit" value = "Add" id = "submit">
 </form>
 <?php
+if($valid === true){
+    ?>
+            <script defer>
+            hideButton("submit");   
+        </script>
+    <?php
+}
 $pdo = null;
 include "inc/footer.inc.php";
 ?>

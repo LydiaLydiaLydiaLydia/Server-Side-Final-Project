@@ -27,7 +27,7 @@ $_GLOBALS['vehicles'] = getVehicles($pdo);
             }
         ?>
     </select>
-    <input type = "submit" value = "See Details">
+    <input type = "submit" value = "See Details" id = "descSubmit">
 </form>
 <?php
 if(isset($_POST['vehicleType'])){
@@ -92,6 +92,12 @@ if(isset($_POST['confirmDelete'])){
         <a href = 'deleteVehicle.php'>Delete another</a>
         <?php
     }
+    ?>
+    <script>
+        hideButton("descSubmit");
+        hideButton("submit");
+    </script>
+    <?php
 }
 ?>
 </div>
