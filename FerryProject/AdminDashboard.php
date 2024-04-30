@@ -10,7 +10,7 @@ include "inc/header.inc.php";
         <h1><a href = "addVehicle.php">Add A Vehicle Type</a></h1>
     </div>
     <div>
-        <h1><a href = "amendVehicle.php">Delete A Vehicle Type</a></h1>
+        <h1><a href = "amendVehicle.php">Amend A Vehicle Type</a></h1>
     </div>
     <div>
         <h1><a href = "deleteVehicle.php">Delete A Vehicle Type</a></h1>
