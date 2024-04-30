@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 $pg_title = "Purchase Ticket | FerrySYS";
@@ -20,18 +19,7 @@ $departures = array();
 //loading in values for the vehicle type picker
 include 'inc/databaseFuncs.inc.php';
 $pdo = connect();
-$allVs = ferrySelect($pdo, 'vehicletypes');
-//$i = 0;
-while($row=$allVs->fetch()){
-    //so the arrays should look like 
-    //vehicles[Car[], Coach[]...etc]
-    //Car[]
-    $vehicles[$row['VDescription']] = array();
-    $vehicles[$row['VDescription']]['vCode'] = $row['VCode'];
-    $vehicles[$row['VDescription']]['price'] = $row['Price'];
-    $vehicles[$row['VDescription']]['units'] = $row['Units'];
-    //$i++;
-}
+$vehicles = getVehicles($pdo);
 
 //loading in the ports from database into array
 $allPts = ferrySelect($pdo, 'Ports');
@@ -39,6 +27,7 @@ $allPts = ferrySelect($pdo, 'Ports');
 while($row=$allPts->fetch()){
     $ports[$row['PCode']] = $row['PName'];
 }
+$pdo = null;
 
 $pName;
 $pCode;
@@ -51,13 +40,14 @@ $_SESSION['forTicket'] = array(
     'tTime' => date('G:i:s'),
     'vCode' => "",
     'salePrice' => 0,
-    'depID' => 0
+    'depID' => 0,
+    'vUnit' => 0
 );
 ?>
 <div id = "content">
 <form action = "Ticket.php" method = "post">
     <label>Pick a Date of Travel</label>
-    <input type = "date" name = "usrDate" value = "<?php echo $dispDate; ?>" min = "2024-04-29" max = "2024-05-05"/>
+    <input type = "date" name = "usrDate" value = "<?php echo $dispDate; ?>" min = "<?php echo $dispDate; ?>" max = "2024-05-30"/>
     <br>
     <label>How will you be travelling?</label>
     <select id = "vehicleType" name = "vehicleType">
@@ -65,7 +55,7 @@ $_SESSION['forTicket'] = array(
         foreach($vehicles as $key => $value){
     ?>
 
-        <option value = "<?php echo $key; ?>">
+        <option value = "<?php echo $key; ?>" id  = "<?php echo $key; ?>">
     <?php echo $key; ?>
         </option>
 
@@ -82,7 +72,7 @@ $_SESSION['forTicket'] = array(
 
     ?>
 
-    <option value = "<?php echo $key; ?>">
+    <option value = "<?php echo $key; ?>" id = "<?php echo $key; ?>">
     <?php echo $value; ?>
     </option>
 
@@ -100,6 +90,7 @@ if(isset($_POST["usrDate"])){
     $pCode = $_POST["depPort"];
     $vType = $_POST['vehicleType'];
     $vUnit = $vehicles[$vType]['units'];
+    $pdo = connect();
     $availTimes = selectDepartures($pdo, $depDate, $pCode);
     foreach($ports as $key => $value){
         if($key != $pCode){
@@ -109,8 +100,11 @@ if(isset($_POST["usrDate"])){
     include "inc/timetable.inc.php";
     $_SESSION['forTicket']['vCode'] = $vehicles[$vType]['vCode'];
     $_SESSION['forTicket']['salePrice'] = $vehicles[$vType]['price'];
+    $_SESSION['forTicket']['vUnit'] = $vehicles[$vType]['units'];
 ?>
 <script>
+    comboBoxSelected("<?php echo $_POST['vehicleType']; ?>");
+    comboBoxSelected("<?php echo $_POST['depPort']; ?>");
     makeButtonsWork();
 </script>
 <div id = "ticketDetails">
@@ -129,8 +123,7 @@ if(isset($_POST["usrDate"])){
     </form>
 </div>
 <?php
-$_SESSION['departures'] = $departures;
-$_SESSION['vUnit'] = $vehicles[$vType]['units']; 
+$_SESSION['departures'] = $departures; 
 }
 include "inc/footer.inc.php";
 ?>

@@ -146,3 +146,10 @@ div>form{
     border-radius: 10px;
     padding: 3%;
 }
+#alert{
+    margin-top: 1rem;
+    padding: 1rem;
+    text-align: center;
+    background-color: cornsilk;
+    border-radius: 10px;
+}

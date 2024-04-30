@@ -1,22 +1,66 @@
 
-  <?php
+<?php
 session_start();
 $pg_title = "Admin Dashboard | FerrySYS";
 $pg_script = "scripts/delete.js";
 include "inc/header.inc.php";
 include "inc/databaseFuncs.inc.php";
 
+if(isset($_POST['confirmDelete'])){
+    $softdelete = false;
+    $pdo = connect();
+    for($i = 0; $i< count($_SESSION['TVCodes']); $i++){
+        if(($_SESSION['TVCodes'][$i]) == ($_SESSION['vehicle']['vCode'])){
+            $softdelete = true;
+            break;
+        }
+    }
+    if($softdelete){
+        $_SESSION['vehicle']['vStatus'] = 'U';
+        updateVehicle($pdo, $_SESSION['vehicle']);
+        ?>
+        <script defer>
+            hideButton();
+        </script>
+        <div id = 'alert'>
+        <p>Vehicle successfully discontinued</p>
+        
+        <a href = 'deleteVehicle.php'>Delete another</a>
+        <div>
+        <?php
+    }
+    else{
+        deleteVehicle($pdo, $_SESSION['vehicle']);
+        session_destroy();
+        ?>
+        <script defer>
+            hideButton();
+        </script>
+        <div id = 'alert'>
+        <p>Vehicle successfully deleted</p>
+        
+        <a href = 'deleteVehicle.php'>Delete another</a>
+    </div>
+        <?php
+    }
+    $pdo = null;
+}
+
 //loading in vcodes that exist in tickets, so we don't hard-delete a necessary constraint
-$pdo = connect();
-$_GLOBALS['TVCodes'] = getTicketVCodes($pdo);
+if(!isset($_POST['vehicleType'])){
+    $pdo = connect();
+    $_SESSION['TVCodes'] = getTicketVCodes($pdo);
 //loading in VehicleTypes for user selection
-$_GLOBALS['vehicles'] = getVehicles($pdo);
+    $_SESSION['vehicles'] = getVehicles($pdo);
+    $pdo = null;
+}
+
 ?>
 <div id = "content"> 
 <form method = 'post' action = 'deleteVehicle.php'>
     <select id = "vehicleType" name = "vehicleType">
         <?php
-            foreach($_GLOBALS['vehicles'] as $key => $value){
+            foreach($_SESSION['vehicles'] as $key => $value){
         ?>
 
         <option value = "<?php echo $key; ?>" id = "<?php echo $key; ?>">
@@ -33,16 +77,15 @@ $_GLOBALS['vehicles'] = getVehicles($pdo);
 if(isset($_POST['vehicleType'])){
     $VDescription = $_POST['vehicleType'];
     $_SESSION['vehicle'] = array(
-        'vCode' => $_GLOBALS['vehicles'][$VDescription]['vCode'],
+        'vCode' => $_SESSION['vehicles'][$VDescription]['vCode'],
         'vDescription' => $VDescription,
-        'price' => $_GLOBALS['vehicles'][$VDescription]['price'],
-        'units' => $_GLOBALS['vehicles'][$VDescription]['units'],
+        'price' => $_SESSION['vehicles'][$VDescription]['price'],
+        'units' => $_SESSION['vehicles'][$VDescription]['units'],
         'vStatus' => 'A'
     );
 }
 if(isset($_POST['vehicleType']) OR (isset($_POST['confirmDelete']))){
-    
-    //echo "<p>".$VDescription."</p>";
+
     ?>
 
 <div id = "vDetails">
@@ -61,37 +104,6 @@ if(isset($_POST['vehicleType']) OR (isset($_POST['confirmDelete']))){
     <?php
 }
 if(isset($_POST['confirmDelete'])){
-    $softdelete = false;
-    for($i = 0; $i< count($_GLOBALS['TVCodes']); $i++){
-        if(($_GLOBALS['TVCodes'][$i]) == ($_SESSION['vehicle']['vCode'])){
-            $softdelete = true;
-            break;
-        }
-    }
-    if($softdelete){
-        $_SESSION['vehicle']['vStatus'] = 'U';
-        updateVehicle($pdo, $_SESSION['vehicle']);
-        ?>
-        <script defer>
-            hideButton();
-        </script>
-        <p>Vehicle successfully discontinued</p>
-        
-        <a href = 'deleteVehicle.php'>Delete another</a>
-        <?php
-    }
-    else{
-        deleteVehicle($pdo, $_SESSION['vehicle']);
-        session_destroy();
-        ?>
-        <script defer>
-            hideButton();
-        </script>
-        <p>Vehicle successfully deleted</p>
-        
-        <a href = 'deleteVehicle.php'>Delete another</a>
-        <?php
-    }
     ?>
     <script>
         hideButton("descSubmit");
@@ -102,6 +114,6 @@ if(isset($_POST['confirmDelete'])){
 ?>
 </div>
 <?php
-$pdo = null;
+
 include "inc/footer.inc.php";
 ?>

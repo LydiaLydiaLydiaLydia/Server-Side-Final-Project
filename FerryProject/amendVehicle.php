@@ -12,13 +12,16 @@ if(isset($_POST['amended'])){
     $_SESSION['vehicle']['price'] = $_POST['price'];
     $_SESSION['vehicle']['units'] = $_POST['units'];
     ?>
+    <div id = 'alert'>
     <p>Vehicle successfully amended</p>
     <a href = "amendVehicle.php">Amend Another</a>
+</div>
     <?php
 }
-if(!isset($_POST['vehicleType'])){
+if(!isset($_POST['vehicleType']) && !isset($_POST['amended'])){
     $pdo = connect();
     $_SESSION['vehicles'] = getVehicles($pdo);
+    $pdo = null;
 }
 ?>
 <form method = 'post' action = 'amendVehicle.php' id = "selectType">
@@ -80,6 +83,7 @@ if(isset($_POST['amended'])){
         hideButton("codeSubmit");
     </script>
     <?php
+    $pdo = connect();
     updateVehicle($pdo, $_SESSION['vehicle']);
     $pdo = null;
     session_destroy();   

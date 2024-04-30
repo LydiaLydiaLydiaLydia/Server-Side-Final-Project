@@ -2,9 +2,11 @@ let depTimes = [];
 let makeButtonsWork = function(){
     let buttons = document.getElementsByClassName("chooseTick");
     let depTDs = document.getElementsByClassName("depTime");
+    for(i = 0; i < depTDs.length; i++){
+        depTimes[i] = depTDs[i].innerHTML;  
+    }
     for(i = 0; i < buttons.length; i++){
         buttons[i].addEventListener("click", chooseTicket, false);
-        depTimes[i] = depTDs[i].innerHTML;
     }
 }
 let chooseTicket = function(e){

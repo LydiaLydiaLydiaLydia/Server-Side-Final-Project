@@ -10,10 +10,6 @@ include "inc/databaseFuncs.inc.php";
 ?>
 <div id = "content">
 <?php
-//retrieve vcodes from db 
-$pdo = connect();
-$vCodes = getVehicleCodes($pdo);
-
 $_SESSION['forVehicle'] = array(
     'vCode' => '',
     'vDescription' => "",
@@ -29,6 +25,9 @@ $val_unit;
 
 $valid = false;
 if(isset($_POST['vdescription'])){
+//retrieve vcodes from db 
+$pdo = connect();
+$vCodes = getVehicleCodes($pdo);
 ?>
 <div id = "insertResponse">
 <?php
@@ -39,7 +38,9 @@ if(isset($_POST['vdescription'])){
     
     for($i = 0; $i < count($vCodes); $i++){
         if($vCodes[$i] === $val_code){
-            echo "<p id = 'alert' >2 Character Identifying Code already exists in database. Please choose another!</p>";
+            ?>
+            <p id = 'alert' >2 Character Identifying Code already exists in database. Please choose another!</p>
+            <?php
             $valid = false;
             break;
         }
@@ -61,6 +62,7 @@ if(isset($_POST['vdescription'])){
         <?php
         }
         $pdo = null;
+        session_destroy();
     }
 ?>
 </div>
