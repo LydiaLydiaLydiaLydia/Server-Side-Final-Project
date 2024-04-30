@@ -118,10 +118,12 @@
             $Vinsert->execute(); 
 
             $Vinsert = null;
+            return true;
         }
         catch(PDOException $e){
             echo "Sorry, cannot connect to the database at this time<br>";
             echo  $e->getMessage()." in ".$e->getFile()." on line ".$e->getLine();
+            return false;
         }
     }
 

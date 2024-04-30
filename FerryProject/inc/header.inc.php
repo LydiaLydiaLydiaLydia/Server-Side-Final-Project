@@ -16,4 +16,3 @@
         <li><a href = "AdminDashboard.php">Admin</a></li>
     </ul>
 </nav>
-<div id = "content">

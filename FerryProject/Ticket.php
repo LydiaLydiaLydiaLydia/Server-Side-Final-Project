@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 $pg_title = "Purchase Ticket | FerrySYS";
@@ -53,6 +54,7 @@ $_SESSION['forTicket'] = array(
     'depID' => 0
 );
 ?>
+<div id = "content">
 <form action = "Ticket.php" method = "post">
     <label>Pick a Date of Travel</label>
     <input type = "date" name = "usrDate" value = "<?php echo $dispDate; ?>" min = "2024-04-29" max = "2024-05-05"/>
@@ -104,7 +106,7 @@ if(isset($_POST["usrDate"])){
             $arrPort = $value;
         }
     }
-    include "timetable.php";
+    include "inc/timetable.inc.php";
     $_SESSION['forTicket']['vCode'] = $vehicles[$vType]['vCode'];
     $_SESSION['forTicket']['salePrice'] = $vehicles[$vType]['price'];
 ?>

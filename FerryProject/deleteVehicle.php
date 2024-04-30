@@ -1,3 +1,4 @@
+
   <?php
 session_start();
 $pg_title = "Admin Dashboard | FerrySYS";
@@ -11,6 +12,7 @@ $_GLOBALS['TVCodes'] = getTicketVCodes($pdo);
 //loading in VehicleTypes for user selection
 $_GLOBALS['vehicles'] = getVehicles($pdo);
 ?>
+<div id = "content"> 
 <form method = 'post' action = 'deleteVehicle.php'>
     <select id = "vehicleType" name = "vehicleType">
         <?php
@@ -51,7 +53,7 @@ if(isset($_POST['vehicleType']) OR (isset($_POST['confirmDelete']))){
     <p>Vehicle Units: <?php echo $_SESSION['vehicle']['units']; ?></p>
     <input type = 'submit' name = "confirmDelete" value = 'confirm delete' id = "submit">
 </form>
-</div>
+
 <script>
     comboBoxSelected("<?php echo $_SESSION['vehicle']['vDescription']; ?>");
     displayDetails();
@@ -60,7 +62,6 @@ if(isset($_POST['vehicleType']) OR (isset($_POST['confirmDelete']))){
 }
 if(isset($_POST['confirmDelete'])){
     $softdelete = false;
-    echo "<p>heya</p>";
     for($i = 0; $i< count($_GLOBALS['TVCodes']); $i++){
         if(($_GLOBALS['TVCodes'][$i]) == ($_SESSION['vehicle']['vCode'])){
             $softdelete = true;
@@ -70,12 +71,31 @@ if(isset($_POST['confirmDelete'])){
     if($softdelete){
         $_SESSION['vehicle']['vStatus'] = 'U';
         updateVehicle($pdo, $_SESSION['vehicle']);
-        echo '<p>Vehicle successfully discontinued</p>';
+        ?>
+        <script defer>
+            hideButton();
+        </script>
+        <p>Vehicle successfully discontinued</p>
+        
+        <a href = 'deleteVehicle.php'>Delete another</a>
+        <?php
     }
     else{
         deleteVehicle($pdo, $_SESSION['vehicle']);
+        session_destroy();
+        ?>
+        <script defer>
+            hideButton();
+        </script>
+        <p>Vehicle successfully deleted</p>
+        
+        <a href = 'deleteVehicle.php'>Delete another</a>
+        <?php
     }
 }
+?>
+</div>
+<?php
 $pdo = null;
 include "inc/footer.inc.php";
 ?>
